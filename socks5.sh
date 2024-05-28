@@ -12,10 +12,11 @@ sudo apt update -y
 sudo apt install dante-server -y
 
 # Create the configuration file
+ETH=$(ip -o -4 route show to default | awk '{print $5}')
 sudo bash -c 'cat <<EOF > /etc/danted.conf
 logoutput: /var/log/danted.log
 internal: 0.0.0.0 port = 1080
-external: eth0
+external: $ETH
 method: username none
 user.privileged: root
 user.notprivileged: nobody
