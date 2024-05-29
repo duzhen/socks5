@@ -9,7 +9,7 @@ read -s password
 sudo apt update -y
 
 # Install dante-server
-sudo apt install dante-server -y
+sudo apt install ufw iptables dante-server -y
 
 # Create the configuration file
 ETH=$(ip -o -4 route show to default | awk '{print $5}')
