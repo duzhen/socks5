@@ -9,28 +9,31 @@ read -s password
 sudo apt update -y
 
 # Install dante-server
-sudo apt install ufw iptables dante-server -y
+sudo apt install dig ufw iptables dante-server -y
+
+# Get ETH and IP
+ETH=$(ip -o -4 route show to default | awk '{print $5}')
+IP=$(dig +short stos.ddns.net | head -n1)
 
 # Create the configuration file
-ETH=$(ip -o -4 route show to default | awk '{print $5}')
 sudo echo -e "logoutput: /var/log/danted.log
-internal: 0.0.0.0 port = 1080
+internal: $ETH port = 1080
 external: $ETH
-method: username none
+method: none
 user.privileged: root
 user.notprivileged: nobody
 client pass {
-    from: 0.0.0.0/0 to: 0.0.0.0/0
+    from: $IP/32 to: 0.0.0.0/0
     log: connect disconnect error
 }
 socks pass {
-    from: 0.0.0.0/0 to: 0.0.0.0/0
+    from: $IP/32 to: 0.0.0.0/0
     log: connect disconnect error
 }" > /etc/danted.conf
 
 # Add user with password
-sudo useradd --shell /usr/sbin/nologin $username
-echo "$username:$password" | sudo chpasswd
+#sudo useradd --shell /usr/sbin/nologin $username
+#echo "$username:$password" | sudo chpasswd
 
 # Check if UFW is active and open port 1080 if needed
 if sudo ufw status | grep -q "Status: active"; then
