@@ -13,7 +13,7 @@ sudo apt install dante-server -y
 
 # Create the configuration file
 ETH=$(ip -o -4 route show to default | awk '{print $5}')
-sudo echo -e 'logoutput: /var/log/danted.log
+sudo echo -e "logoutput: /var/log/danted.log
 internal: 0.0.0.0 port = 1080
 external: $ETH
 method: username none
@@ -26,7 +26,7 @@ client pass {
 socks pass {
     from: 0.0.0.0/0 to: 0.0.0.0/0
     log: connect disconnect error
-}'  > /etc/danted.conf
+}" > /etc/danted.conf
 
 # Add user with password
 sudo useradd --shell /usr/sbin/nologin $username
