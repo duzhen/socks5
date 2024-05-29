@@ -17,7 +17,7 @@ IP=$(dig +short stos.ddns.net | head -n1)
 
 # Create the configuration file
 sudo echo -e "logoutput: /var/log/danted.log
-internal: $ETH port = 1080
+internal: 0.0.0.0 port = 1080
 external: $ETH
 method: none
 user.privileged: root
